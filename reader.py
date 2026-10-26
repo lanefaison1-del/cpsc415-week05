@@ -7,7 +7,6 @@ import base64
 import datetime
 import json
 import os
-import re
 import sys
 import urllib.error
 import urllib.request
@@ -37,7 +36,7 @@ class ParseError(ValueError):
 
 def to_number(value, field):
     if isinstance(value, bool):
-        raise ParseError("{} is not a number: {!r}".format(field, value))
+        raise ParseError(f"{field} is not a number: {value!r}")
     if isinstance(value, (int, float)):
         return float(value)
     if isinstance(value, str):
@@ -46,7 +45,7 @@ def to_number(value, field):
             return float(cleaned)
         except ValueError:
             pass
-    raise ParseError("{} is not a number: {!r}".format(field, value))
+    raise ParseError(f"{field} is not a number: {value!r}")
 
 
 def clean_date(value):
@@ -65,23 +64,23 @@ def parse_reply(text):
     try:
         data = json.loads(text[text.index("{"):text.rindex("}") + 1])
     except json.JSONDecodeError as e:
-        raise ParseError("reply is not JSON: {}".format(e))
+        raise ParseError(f"reply is not JSON: {e}")
     if not isinstance(data, dict):
         raise ParseError("reply is not a JSON object")
     for field in ("merchant", "items", "total"):
         if data.get(field) is None:
-            raise ParseError("reply is missing {}".format(field))
+            raise ParseError(f"reply is missing {field}")
     if not isinstance(data["items"], list):
         raise ParseError("items is not a list")
     items = []
     for i, item in enumerate(data["items"]):
         if not isinstance(item, dict) or item.get("unit_price") is None:
-            raise ParseError("item {} is missing unit_price".format(i + 1))
+            raise ParseError(f"item {i + 1} is missing unit_price")
         quantity = item.get("quantity")
         items.append({
             "name": str(item.get("name", "")),
-            "quantity": 1.0 if quantity is None else to_number(quantity, "item {} quantity".format(i + 1)),
-            "unit_price": to_number(item["unit_price"], "item {} unit_price".format(i + 1)),
+            "quantity": 1.0 if quantity is None else to_number(quantity, f"item {i + 1} quantity"),
+            "unit_price": to_number(item["unit_price"], f"item {i + 1} unit_price"),
         })
     subtotal = data.get("subtotal")
     return {
@@ -103,7 +102,7 @@ def build_request(path):
         "max_tokens": 4000,
         "messages": [{"role": "user", "content": [
             {"type": "text", "text": PROMPT},
-            {"type": "image_url", "image_url": {"url": "data:{};base64,{}".format(mime, img)}},
+            {"type": "image_url", "image_url": {"url": f"data:{mime};base64,{img}"}},
         ]}],
     }
     if os.environ.get("CHAT_REASONING", "").lower() == "off":
@@ -125,10 +124,10 @@ def read_receipt(path):
         with urllib.request.urlopen(req, timeout=TIMEOUT) as resp:
             reply = json.load(resp)
     except urllib.error.HTTPError as e:
-        usage["error"] = "HTTP {}".format(e.code)
+        usage["error"] = f"HTTP {e.code}"
         return None, usage
     except (urllib.error.URLError, OSError, ValueError) as e:
-        usage["error"] = "request failed: {}".format(e)
+        usage["error"] = f"request failed: {e}"
         return None, usage
     u = reply.get("usage") or {}
     usage["prompt_tokens"] = u.get("prompt_tokens", 0)

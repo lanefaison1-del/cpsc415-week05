@@ -1,7 +1,7 @@
 """Parser tests: hand-written model replies, no model, no key."""
-from reader import ParseError, parse_reply
-
 import pytest
+
+from reader import ParseError, parse_reply
 
 CLEAN = ('{"merchant": "Long Walk Coffee", "date": "2026-10-06", "items": ['
          '{"name": "Latte 12oz", "quantity": 1, "unit_price": 4.75}], '
@@ -54,7 +54,7 @@ def test_missing_discount_tax_and_quantity_default():
 
 @pytest.mark.parametrize("date", [None, "", "10-03", "Oct 3", "2026-13-03", "unknown"])
 def test_date_without_a_year_is_null(date):
-    r = parse_reply(CLEAN.replace('"2026-10-06"', "null" if date is None else '"{}"'.format(date)))
+    r = parse_reply(CLEAN.replace('"2026-10-06"', "null" if date is None else f'"{date}"'))
     assert r["date"] is None
 
 

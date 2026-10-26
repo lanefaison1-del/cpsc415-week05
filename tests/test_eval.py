@@ -2,7 +2,6 @@
 import re
 
 import pytest
-
 from conftest import image_names
 
 pytestmark = pytest.mark.model
@@ -24,7 +23,7 @@ def mismatch(name, field, model_value, key_value, problems):
     note = (" The checker finds no arithmetic problem on this read, so the key may be wrong: "
             "say so and stop; do not edit images/ or expected.json." if not problems else
             " The checker also reports: " + "; ".join(problems))
-    return "{} {}: model read {!r}, key says {!r}.{}".format(name, field, model_value, key_value, note)
+    return f"{name} {field}: model read {model_value!r}, key says {key_value!r}.{note}"
 
 
 @pytest.mark.parametrize("name", IMAGES)
@@ -57,5 +56,5 @@ def test_date(reads, expected, name):
 
 @pytest.mark.parametrize("name", IMAGES)
 def test_checker_finds_no_problems(reads, name):
-    receipt, problems = got(reads, name)
+    _receipt, problems = got(reads, name)
     assert problems == [], "{}: {}".format(name, "; ".join(problems))

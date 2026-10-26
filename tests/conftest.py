@@ -9,8 +9,8 @@ import pytest
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from checker import check  # noqa: E402
-from reader import DEFAULT_MODEL, read_receipt  # noqa: E402
+from checker import check
+from reader import DEFAULT_MODEL, read_receipt
 
 RESULTS = {}
 
@@ -77,4 +77,4 @@ def pytest_terminal_summary(terminalreporter):
             name, receipt["merchant"], receipt["date"], len(receipt["items"]), receipt["total"],
             "ok" if not problems else "; ".join(problems), usage["prompt_tokens"],
             usage["completion_tokens"], usage["finish_reason"]))
-    tr.write_line("| **Total** | | | | | | {} | {} | |".format(tin, tout))
+    tr.write_line(f"| **Total** | | | | | | {tin} | {tout} | |")

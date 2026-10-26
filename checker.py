@@ -4,7 +4,7 @@ TOLERANCE = 0.01
 
 
 def money(x):
-    return "{:.2f}".format(x)
+    return f"{x:.2f}"
 
 
 def agree(a, b):
@@ -29,22 +29,17 @@ def check(receipt):
     total = receipt["total"]
 
     if total < 0:
-        problems.append("Total is negative: {}.".format(money(total)))
+        problems.append(f"Total is negative: {money(total)}.")
 
     if subtotal is None:
         computed = round(items_sum - discount + tax, 2)
         if not agree(computed, total):
-            problems.append("Items {} - discount {} + tax {} = {}, but the total is {} (off by {}).".format(
-                money(items_sum), money(discount), money(tax), money(computed), money(total),
-                money(abs(computed - total))))
+            problems.append(f"Items {money(items_sum)} - discount {money(discount)} + tax {money(tax)} = {money(computed)}, but the total is {money(total)} (off by {money(abs(computed - total))}).")
         return problems
 
     if not agree(items_sum, subtotal):
-        problems.append("Items add up to {}, but the subtotal is {} (off by {}).".format(
-            money(items_sum), money(subtotal), money(abs(items_sum - subtotal))))
+        problems.append(f"Items add up to {money(items_sum)}, but the subtotal is {money(subtotal)} (off by {money(abs(items_sum - subtotal))}).")
     computed = round(subtotal - discount + tax, 2)
     if not agree(computed, total):
-        problems.append("Subtotal {} - discount {} + tax {} = {}, but the total is {} (off by {}).".format(
-            money(subtotal), money(discount), money(tax), money(computed), money(total),
-            money(abs(computed - total))))
+        problems.append(f"Subtotal {money(subtotal)} - discount {money(discount)} + tax {money(tax)} = {money(computed)}, but the total is {money(total)} (off by {money(abs(computed - total))}).")
     return problems
