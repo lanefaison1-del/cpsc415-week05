@@ -43,7 +43,8 @@ Implements [`intent/receipts.md`](intent/receipts.md).
 11. When there is no subtotal, the checker compares the line amounts, minus discount, plus tax, with the total directly.
 12. Two amounts agree when they differ by at most $0.01.
 13. The checker reports a negative total or an item with quantity below 1, and returns problems; it never raises on a well-formed receipt.
-14. The eval reads every image in `RECEIPT_DIR` once, compares each with `RECEIPT_DIR/expected.json` (total within one cent, number of items, merchant ignoring case, date) and asserts the checker reports no problems. It prints a per-receipt table with tokens in and out.
+14. The eval reads every image in `RECEIPT_DIR` once, compares each with `RECEIPT_DIR/expected.json` (total within one cent, number of items, merchant, date) and asserts the checker reports no problems. It prints a per-receipt table with tokens in and out.
+15. Merchants match when they have the same words in any order, ignoring case and punctuation. The key writes receipt-05 as "CS Club Bake Sale" while the receipt prints "Bake Sale - CS Club"; both are the same merchant, and a model that copies the printed name has read it correctly.
 
 ## Failure handling
 
