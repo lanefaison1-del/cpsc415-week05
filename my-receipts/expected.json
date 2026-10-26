@@ -1,0 +1,14 @@
+{
+  "receipt-hacienda.jpg": {
+    "merchant": "Hacienda Don Manuel",
+    "date": null,
+    "items": 10,
+    "total": 152.92
+  },
+  "receipt-ichiro.jpg": {
+    "merchant": "Ichiro Hibachi & Sushi",
+    "date": "2024-04-05",
+    "items": 9,
+    "total": 173.22
+  }
+}
