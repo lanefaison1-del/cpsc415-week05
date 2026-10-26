@@ -22,3 +22,5 @@ venv/
 .gradle/
 bin/
 obj/
+.pytest_cache/
+.ruff_cache/
