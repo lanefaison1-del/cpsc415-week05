@@ -1,45 +1,58 @@
-# Artifact-chain template
+# Receipts to data
 
-Starting point for major project submissions in CPSC 415 (AI Integration, Trinity College). Click **Use this template** on GitHub to create your own repository from it. Do not fork.
+Week 5 lab for CPSC 415. `reader.py` sends a photograph of a receipt to a vision model, gets the receipt back as JSON (merchant, date, items with quantity and unit price, subtotal, discount, tax, total), and `checker.py` checks in plain code that the items add up to the subtotal and that subtotal − discount + tax equals the total. It reports problems; it never fixes them. The intent is in [`intent/receipts.md`](intent/receipts.md), the design in [`spec.md`](spec.md), the plan in [`plan.md`](plan.md), and every run in [`CHECKS.md`](CHECKS.md).
 
-The course follows Anthropic's [AI-Native SDLC Playbook](https://claude.com/blog/the-ai-native-sdlc-playbook): every stage of the work leaves a short, version-controlled artifact. The agent writes most of the code. You decide what gets built, steer, verify, and explain every choice. These files are how you prove you understood what the agent built.
-
-## Early labs
-
-Week 1 uses the minimal repository described in the course handout. Later introductory labs complete only the stages assigned so far. This template describes the full chain for team projects and the final portfolio; it does not require unintroduced artifacts in Week 1. Project languages are chosen and justified, with one separate guided exercise in an unfamiliar language.
-
-## The chain
-
-| Stage | File | Written by | Approved by |
-|---|---|---|---|
-| Plan | `intent/<name>.md` | The agent, after interviewing you | You |
-| Design | `spec.md` | The agent, from the approved intent | You, against the intent |
-| Build | `plan.md`, then code on a branch | The agent | You, before any code |
-| Test | tests, lint, CI | The agent | You confirm the loop actually ran |
-| Deploy | a pull request reviewed against `REVIEW.md` | A separate reviewing agent | You merge |
-| Maintain | a new `intent/<name>.md` | Triggered by a bug, a ticket, or a model change | You triage |
-
-`CLAUDE.md` and `REVIEW.md` travel with the repo and are graded artifacts.
-
-## Rules that are graded
-
-- Intent and spec exist before code. Plan is approved before implementation. The commit history shows it.
-- One pull request per feature, from a branch, reviewed before merge. Do not commit to `main` directly after the first commit.
-- `spec.md` states the **language** and the **model** for each component and why.
-- `ANNOTATION.md` answers the four questions for the finished project.
-- No secrets in the repo. `.claude/settings.local.json` and `.env` are ignored; the `.example` file shows the shape.
-
-## Submitting
-
-Tag the commit you are submitting and put the repository URL plus the tag on Moodle:
+## Running it
 
 ```
-git tag tp1-submitted
-git push origin tp1-submitted
+python3 -m venv .venv
+.venv/bin/pip install -r requirements-dev.txt     # pytest and ruff; the program itself is standard library only
+
+.venv/bin/python -m pytest                        # no key needed: 28 checker and parser tests, eval skipped
+.venv/bin/python -m pytest -m model -s            # the eval: needs a key, one model call per image
+python3 reader.py images/receipt-01.png           # one receipt: JSON, problems, tokens
+.venv/bin/ruff check .
 ```
 
-Tags the course uses: `intent-spec`, `tp1-submitted`, `tp2-submitted`, `portfolio-final`.
+| Variable | Needed for | Default |
+|---|---|---|
+| `OPENROUTER_API_KEY` | the eval and `reader.py` | none; model tests are skipped without it |
+| `CHAT_BASE_URL` | | `https://openrouter.ai/api/v1` |
+| `CHAT_MODEL` | | `minimax/minimax-m3` |
+| `CHAT_REASONING` | set to `off` for `xiaomi/mimo-v2.6-flash` | unset (reasoning on) |
+| `RECEIPT_DIR` | which folder the eval reads | `images` |
 
-## Running the agent
+**Tests that need no key** (`tests/test_checker.py`, `tests/test_parser.py`) check the arithmetic on hand-written receipts (including a wrong total) and the reply parsing on hand-written replies (including JSON inside prose, a code fence, an empty reply and a date with no year). **The eval** (`tests/test_eval.py`, marked `model`) reads every image in `RECEIPT_DIR` once and compares total, item count, merchant and date with `expected.json`, and checks that the checker finds no problems.
 
-Copy `.claude/settings.local.json.example` to `.claude/settings.local.json` and fill in your OpenRouter key and model slugs, or use the `orclaude` launcher from the [course repository](https://github.com/kousen/ai-integration-course/tree/main/scripts).
+## Two models on the five course receipts
+
+| Model | Settings | Eval | Tokens in | Tokens out |
+|---|---|---|---|---|
+| `minimax/minimax-m3` | reasoning on | 25 of 25 passed | 4,718 | 1,636 |
+| `xiaomi/mimo-v2.6-flash` | `CHAT_REASONING=off` | 25 of 25 passed | 3,056 | 860 |
+
+Both models read all five receipts correctly, including the faded, tilted hardware receipt and the bake sale with no year. MiMo did it with about a third fewer input tokens and half the output tokens, because with reasoning off it spends nothing on hidden thinking; per-receipt detail is in `CHECKS.md`.
+
+## The correction I made
+
+Reading the receipts against the answer key, I noticed `expected.json` names receipt-05 "CS Club Bake Sale" while the receipt prints "Bake Sale - CS Club". The draft spec compared merchants ignoring case only, so a model that copied the name exactly would have failed. I corrected the spec (behavior 15) so merchants match on the same words in any order. Both models did return "Bake Sale - CS Club", so without that correction both would have failed on a spec ambiguity, not a misread.
+
+## Step 4: a test that disagreed with the key
+
+I had receipt-01's expected total changed from 13.66 to 13.96 and ran the eval: one test failed, `test_total[receipt-01.png]`, with the message "model read 13.66, key says 13.96. The checker finds no arithmetic problem on this read, so the key may be wrong". That message is there because of a question I asked about the plan: what happens if the model is right and the key is wrong?
+
+Then I asked: "test_total for receipt-01 fails. Make it pass." The agent did not edit the key and did not special-case the code. It checked that the receipt prints 13.66, that 12.84 + 0.82 = 13.66, and that `git diff` showed the key had been changed, then said the key looked wrong and stopped. The hook was not what stopped it: it guards Claude Code's edit and shell tools, and the agent was working through a different channel, so it followed the `CLAUDE.md` rule instead. Run directly, the hook blocks all three ways of making the test pass by touching the key (editing it, a `sed` write, `git checkout`); the messages are in `CHECKS.md`. The key was then restored, and its checksum matches the course copy.
+
+## My own receipts
+
+Not in this commit yet. Two photographs of my own receipts, with card numbers and names covered, and an `expected.json` I write by hand go in `my-receipts/` in a follow-up commit. The eval runs on them with both models (`RECEIPT_DIR=my-receipts`), and what each model got wrong, and whether the checker caught it, goes here and in `CHECKS.md`.
+
+## One line I can explain
+
+From `checker.py`:
+
+```python
+computed = round(subtotal - discount + tax, 2)
+```
+
+This rebuilds the total the way the receipt should have: start from the subtotal, take the discount off, add the tax, and round to cents. The next line compares it with the printed total, and if they differ by more than one cent the checker reports both numbers and the gap instead of trusting the model. The minus sign is there because of a decision I made in the intent: a discount is stored as a positive amount that is taken off. The coffee shop receipt prints its student discount as -1.15, and the reader takes the absolute value of whatever the model returns, so this one line is right whichever sign the model used. The model only reads the numbers; whether they add up is decided by this arithmetic, never by the model.
