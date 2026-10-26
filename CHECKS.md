@@ -94,3 +94,37 @@ Its reply: the model read the receipt correctly and the expected value looks wro
 The hook would not catch the third bad outcome, a special case in `reader.py` for receipt-01; only review of the diff catches that.
 
 **Restored.** The key was restored with `git checkout -- images/expected.json`, again as my hand step; its checksum matches the course copy.
+
+## My own receipts
+
+Two restaurant receipts I photographed (`my-receipts/`), server names blacked out, with an `expected.json` I wrote from the paper. Both are harder than the course set: the Ichiro receipt is crumpled, stained and partly shadowed, has a 20% service charge, and prints split items as `(1/3) 3 Scorpion Bowl For 2` with the line total, not a unit price; on both receipts the price column sits about one row above the item it belongs to. The Hacienda receipt prints no date and has modifier lines (`· pina`, `Chicken^`) under some items.
+
+Eval command: `RECEIPT_DIR=my-receipts python -m pytest -m model`.
+
+### `minimax/minimax-m3`, reasoning on: 9 passed, 1 failed
+
+| Receipt | Merchant read | Date | Items | Total | Checker | Tokens in | Tokens out |
+|---|---|---|---|---|---|---|---|
+| receipt-hacienda.jpg | Hacienda Don Manuel | null | 10 | 152.92 | ok | 2,316 | 1,039 |
+| receipt-ichiro.jpg | Ichiro Hibachi & Sushi | 2024-04-05 | 9 | 173.22 | Subtotal 136.00 + tax 10.02 = 146.02, but the total is 173.22 (off by 27.20) | 2,374 | 1,251 |
+
+### `xiaomi/mimo-v2.6-flash`, `CHAT_REASONING=off`: 7 passed, 3 failed
+
+| Receipt | Merchant read | Date | Items | Total | Checker | Tokens in | Tokens out |
+|---|---|---|---|---|---|---|---|
+| receipt-hacienda.jpg | Hacienda Don Manuel | null | **11** | 152.92 | Items add up to 156.40, but the subtotal is 142.45 (off by 13.95) | 1,664 | 335 |
+| receipt-ichiro.jpg | Ichiro Hibachi & Sushi | 2024-04-05 | 9 | 173.22 | Items add up to 283.00, but the subtotal is 136.00 (off by 147.00); total off by 27.20 | 1,664 | 339 |
+
+### What went wrong, and whether the checker caught it
+
+| Failure | Model | Cause | Caught by |
+|---|---|---|---|
+| Ichiro total off by exactly 27.20 | both | **Spec gap.** The receipt adds up on paper (136.00 + 10.02 tax + 27.20 service charge = 173.22), but the spec's receipt has no service-charge field, so the charge has nowhere to go. Both models read every number correctly. | The checker, on both models |
+| Ichiro items add up to 283.00, not 136.00 | MiMo | **Misread.** It took the printed line totals as unit prices: `(1/3) 3 Scorpion Bowl` became 3 × 20.00 instead of 20.00, and the steaks 2 × 28.00. MiniMax divided correctly. | The checker (off by 147.00) |
+| Hacienda: 11 items instead of 10 | MiMo | **Misread.** It counted a modifier line as its own item, so one 13.95 was counted twice. A second read of the same image gave 10 items and no problems: the error is not repeatable. | The item-count test and the checker (off by 13.95) |
+
+Everything the key checks other than these was read correctly by both models: both merchants, both totals, the Ichiro date, and a null date for the Hacienda receipt, which prints no date at all.
+
+One more thing showed up in a second, single-image read of the Ichiro receipt with MiniMax: it gave the Scorpion Bowls a unit price of 6.67 (20.00 ÷ 3, rounded), so the items came to 136.02 and the checker reported a 2-cent gap. That is the risk the plan names for receipts that print only a line amount; the one-cent tolerance does not absorb it when a rounded unit price is multiplied back up.
+
+**Takeaway.** On real paper the checker earned its place: it caught both of MiMo's misreads even though MiMo still got the merchant and the total right, which the key alone would have passed. It also exposed a gap in my own spec, the service charge, which a model cannot fix by reading better.

@@ -45,7 +45,14 @@ Then I asked: "test_total for receipt-01 fails. Make it pass." The agent did not
 
 ## My own receipts
 
-Not in this commit yet. Two photographs of my own receipts, with card numbers and names covered, and an `expected.json` I write by hand go in `my-receipts/` in a follow-up commit. The eval runs on them with both models (`RECEIPT_DIR=my-receipts`), and what each model got wrong, and whether the checker caught it, goes here and in `CHECKS.md`.
+Two restaurant receipts I photographed, in `my-receipts/` with an `expected.json` I wrote from the paper (server names blacked out). Real paper was much harder than the course set:
+
+| | MiniMax | MiMo |
+|---|---|---|
+| Hacienda Don Manuel (no date printed) | all 5 checks passed | counted a modifier line as an 11th item; the checker caught the 13.95 gap |
+| Ichiro Hibachi & Sushi (crumpled, 20% service charge) | total off by 27.20 | read line totals as unit prices (items 283.00, not 136.00); total off by 27.20 |
+
+The 27.20 is the service charge, and it is my spec's fault, not the models': the receipt adds up on paper, but the spec has no field for a service charge, so the checker reports it on both models. MiMo's two errors were real misreads, and the checker caught both even though MiMo still got the merchant and the total right. Details are in `CHECKS.md`.
 
 ## One line I can explain
 
