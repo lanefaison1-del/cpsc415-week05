@@ -29,7 +29,8 @@
 - Step 1 rests on the line amount being `quantity × unit_price`. A receipt that prints only the line amount ("2.67") with no unit price would need the model to divide; if it rounds badly the checker reports a false problem. I would notice as a problem on a receipt whose printed numbers agree.
 - Step 3 rests on the eval making one call per image. If each test called the model, five tests times five receipts is 25 calls instead of 5; I would notice in the token totals.
 - The discount sign (behavior 7): if a model returns a positive discount for a receipt that printed it as a surcharge, the absolute value hides it. None of the course receipts has a surcharge.
-- `expected.json` could itself be wrong. The eval would fail on a receipt the model read correctly; the fix is to say so and stop, never to edit the key (the hook enforces this).
+- `expected.json` could itself be wrong. The eval would fail on a receipt the model read correctly; the fix is to say so and stop, never to edit the key (the hook enforces this). To make that visible, every eval failure prints the model's value next to the key's, and when the checker finds no arithmetic problem on that receipt the failure says the key may be wrong.
+- Step 3 rests on both models returning content. `xiaomi/mimo-v2.6-flash` can spend its whole output budget on hidden reasoning and return an empty reply with `finish_reason: length`; it would show up as five failed reads. The eval table records `finish_reason` for every receipt, and MiMo runs with `CHAT_REASONING=off`.
 
 ## Proof
 
@@ -38,10 +39,10 @@
 - `test_checker.py` proves the arithmetic: a receipt that adds up gives no problems; a wrong total, wrong subtotal, discount applied, no subtotal, quantity times unit price, and the one-cent tolerance each give the expected result. This proves the checker is right on its own, before any model is involved.
 - `test_parser.py` proves the reply handling: clean JSON, JSON inside prose, JSON in a code fence, an empty reply, not JSON at all, a missing field, a negative discount, and a date with no year. This proves a bad reply is a failed read and not a crash.
 
-**With a key** (`python -m pytest -m model`): the eval reads every image in `RECEIPT_DIR` and compares total, item count, merchant and date with `expected.json`, and that the checker finds no problems. This proves the model reads these images; it is the only part that can fail because of a model.
+**With a key** (`python -m pytest -m model`): the eval reads every image in `RECEIPT_DIR` and compares total, item count, merchant and date with `expected.json`, and that the checker finds no problems. This proves the model reads these images; it is the only part that can fail because of a model. When a receipt fails, the printed model value, key value and checker result together say whether the model misread the image, the spec was ambiguous, or the key itself is wrong; if it is the key, the run stops there and the key is not edited.
 
 ## Subagents and parallel work
 
 None.
 
-**Approved by:** <your name>, <date>
+**Approved by:** Lane Faison, October 26, 2026
