@@ -73,8 +73,9 @@ the same name.
 2. Generator: write `test_generate.py`, see it fail, then `generate.py`.
 3. The vision call and the command line in `critique.py`. `ruff check .`; record what it finds.
 4. Billed run: five FLUX images, then look at all five myself, reading each name letter by
-   letter, before reading any critique. Then five MiniMax critiques, the FERNKIT seed repeat, and
-   FERNKIT on Gemini. Commit `Image set: five images, critiques, two image models`.
+   letter, before reading any critique, and write down what I saw for every image. Then five
+   MiniMax critiques, the FERNKIT seed repeat, and FERNKIT on Gemini. Commit
+   `Image set: five images, critiques, two image models`.
 5. Step 5: the MiMo critique, `--compare`, every disagreement checked by eye, my open-ended
    critique of one image, and the three sentences. Commit `Image set: the critic checked`.
 6. The team pull request, then the Review section of `CHECKS.md`, tag `week06-submitted`.
@@ -109,7 +110,14 @@ the same name.
 (checklist and banner read), five MiMo critiques, one seed repeat, one Gemini image. This proves
 what these models actually do on my prompts, and is the only part that costs money.
 
+- **A wrong verdict from the critic** (unmet when it is met, or the reverse) is caught by no test.
+  `CHECKS.md` therefore has a "what I saw" column for every image, my own verdict beside the
+  critic's, not only for the images where MiniMax and MiMo disagree.
+- **The seed check:** FERNKIT again with seed 6301 into `images-seed/`, compared two ways: the
+  two pictures side by side by eye, and the two files with `cmp`. Both results go in `CHECKS.md`;
+  the same picture with different file bytes means the seed fixes the picture, not the file.
+
 ### Subagents and parallel work
 None.
 
-**Approved by:** <your name>, <date>
+**Approved by:** Lane Faison, 2026-11-02
