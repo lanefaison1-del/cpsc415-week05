@@ -33,6 +33,8 @@ picture that came out wrong, and picking the best of several pictures.
   type, and the cost from the reply for each.
 - For each image the checker says ok, or names each requirement that is unmet, unanswered, or
   invented, and says whether the banner name it read matches the one asked for.
+- I look at all five images myself, reading each name letter by letter, before reading any
+  critique.
 - `week06/CHECKS.md` says where MiniMax and MiMo disagreed and who was right by my own eye.
 
 ## Open questions
@@ -50,4 +52,4 @@ None. Creature family, models, and seeds were settled in the interview.
 Every image also gets the team's four shared requirements: exactly one creature, a plain white
 background, the name in a banner at the top, no text other than the name.
 
-**Approved by:** <your name>, <date>
+**Approved by:** Lane Faison, 2026-11-02
