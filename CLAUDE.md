@@ -17,6 +17,7 @@ The Week 5 lab for CPSC 415: a command-line program that reads a photograph of a
 ## Conventions
 
 - Language: Python; code must run on Python 3.9 or later. The program uses the standard library only; pytest and ruff are dev-only.
+- `week06/` needs Python 3.10 or later, because the `openrouter` SDK requires it; `.venv` is Python 3.11.
 - Default chat model: `minimax/minimax-m3` through OpenRouter, compared with `xiaomi/mimo-v2.6-flash`. Final choices and reasons are recorded in `spec.md`.
 - Configuration comes only from the environment: `OPENROUTER_API_KEY`, `CHAT_BASE_URL`, `CHAT_MODEL`, `CHAT_REASONING`, `RECEIPT_DIR`. No key or secret in code or in the repo.
 - File naming: lowercase snake_case. Tests are `tests/test_<module>.py`.
@@ -38,6 +39,13 @@ For an introductory lab, follow its explicitly assigned stages; the full chain b
 - Ensure all commits are authored by Lane Faison.
 - Course requirement: intent and spec come before code, and `plan.md` is approved before implementation starts. Tests are written and run before the code they test.
 - Never commit `.env` or `.claude/settings.local.json`.
+- Week 6: the image-set lab lives in week06/. Stages assigned: intent, spec,
+  plan, tests, and (in the team repository only) a reviewed pull request.
+  Commit to main here; branches and PRs are for the team repository.
+- Image generation and vision calls are billed. One generation per prompt,
+  one critique per image, fixed seeds. Never loop over the model inside a test.
+- The critique is model output. The code compares it with the requirements;
+  it does not trust it.
 
 ## Common mistakes
 
