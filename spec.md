@@ -59,3 +59,88 @@ About 700 to 1,000 tokens in and 150 to 400 out per receipt. At under $1 per mil
 ## Out of scope
 
 Carried from the intent: correcting receipts, payment details, multi-receipt images, currency. Also ruled out: `response_format` JSON schema (an early-finish experiment, not the default), and a retry loop on a failed read.
+
+## Week 6: image set
+
+Implements [`intent/image-set.md`](intent/image-set.md). Everything lives in `week06/`.
+
+### Generator (`week06/generate.py`)
+- **What it does:** makes one Image API call per prompt in `prompts.json`, saves each image, and
+  writes `manifest.json` beside the images with what was asked for and what it cost.
+- **Language:** Python 3.11 in `.venv`. **Why:** the `openrouter` SDK and the course examples are
+  Python, my Weeks 2–5 code is Python, and the team project's generator is Python, so my prompts
+  file works in both places. Java was the alternative; it has no OpenRouter SDK, so I would write
+  the Image API request by hand.
+- **Model:** `black-forest-labs/flux.2-klein-4b` by default, compared with
+  `google/gemini-3.1-flash-lite-image` on FERNKIT, seed 6301. **Why:** FLUX is the class image
+  model, about $0.014 per image, and accepts a seed. Gemini is priced per image token (about
+  $0.034 for one 1:1 image in class) and adds a SynthID watermark. The comparison's cost and
+  verdict go in `week06/CHECKS.md`.
+- **Interfaces:** `generate_one(client, model, prompt, seed, aspect_ratio="1:1")` returns
+  `{"bytes", "media_type", "cost"}`; `run(client, prompts, out, model, aspect_ratio="1:1",
+  only=None)` returns the manifest. Command line:
+  `python generate.py prompts.json --out DIR [--model SLUG] [--only NAME]`. Manifest entry:
+  `name`, `prompt`, `seed`, `requirements`, `expected_text`, `model`, `aspect_ratio`, `file`,
+  `media_type`, `cost`, `seconds`.
+
+### Critic-checker (`week06/critique.py`)
+- **What it does:** sends each image with a yes/no checklist made from its requirements to a
+  vision model, takes the JSON out of the reply, and compares the checklist with the requirements
+  in plain code. A second, narrow question asks the model to write the largest text in the image
+  exactly as printed, and the code compares that with the expected name. `--compare` lists where two
+  critique files disagree.
+- **Language:** Python 3.11, same as the generator; it reuses the same SDK client.
+- **Model:** `minimax/minimax-m3` as the critic, checked by `xiaomi/mimo-v2.6-flash`. **Why:**
+  both are the class vision models I compared in Week 5. MiniMax read the faded receipt date
+  only with its reasoning on, so it runs with reasoning on. MiMo is cheaper and from a different
+  vendor, which makes it a second opinion rather than a repeat; it runs with
+  `reasoning={"effort": "none"}`, the SDK form of `{"enabled": false}`, or its reply comes back
+  empty.
+- **Interfaces:** `extract_json(text)` returns a dict or `None`; `check(requirements, critique)`
+  returns `{"ok", "problems", "unmet", "missing", "extra"}`; `text_matches(expected, read)`
+  returns a bool; `disagreements(a, b)` returns a list of images, each with the requirements on
+  which the two files differ. Command line: `python critique.py images/manifest.json [--model
+  SLUG] [--out FILE]` and `python critique.py --compare A.json B.json`.
+
+### Behavior (no key unless marked)
+1. The generator makes exactly one call per prompt, with that prompt's text, seed, and the model
+   given; `--only NAME` makes exactly one call.
+2. Every manifest entry has all the fields above. `cost` is the reply's `usage.cost`, or `null`
+   when the reply has none; the summary line says how many costs were missing instead of counting
+   them as $0.
+3. `manifest.json` is written after every image, so a failure partway keeps the record of the
+   images already paid for. A reply with no image raises an error that names the model.
+4. A critique in which every requirement is answered and met is ok.
+5. A requirement answered with anything other than `true` is reported unmet, by name.
+6. A requirement the critic did not answer is a problem, even when every answered one is met.
+7. An item the critic answered that was not asked for (an invented requirement) is a problem.
+8. A critique that is not JSON is a failed critique, not a crash: every requirement counts as
+   unanswered.
+9. JSON inside prose or a code fence is still extracted.
+10. Requirement text is matched ignoring case and punctuation.
+11. Expected text is compared in code, not by the critic: the text the model read is compared
+    with `expected_text` ignoring case and punctuation. "AI Integration" against
+    "AI Integratlon" is a mismatch, and so is no reply.
+12. `--compare` lists every image and requirement where two critique files disagree, including
+    the banner text read, without a key.
+13. Without `OPENROUTER_API_KEY`, `generate.py` and `critique.py` each print one line saying so
+    and exit 1; nothing is billed.
+14. (Key, by hand.) The five FLUX images, one seed repeat, one Gemini image, and critiques from
+    both vision models, run once each, are in `week06/` with their costs in `CHECKS.md`.
+
+### Failure handling
+A model that rejects `seed` or `aspect_ratio`, an HTTP error, or a timeout raises; the error is
+shown and nothing is retried. An empty reply or `finish_reason: length` from the critic is a
+failed critique (behavior 8) with the finish reason recorded.
+
+### Cost
+Five FLUX images about $0.07, the seed repeat $0.014, one Gemini image about $0.034, two critic
+calls per image on MiniMax (checklist and banner read) about $0.0015 per image, MiMo less. One
+full run is about $0.13.
+
+### Dependencies (Week 6)
+- `openrouter` (pip, in `requirements-dev.txt`). **Reason:** the official OpenRouter SDK:
+  `client.images.generate` for the Image API and `client.chat.send` for the vision critique, one
+  client for both request shapes. By hand it would be two `urllib.request` calls with my own JSON,
+  base64, and error handling, as in Weeks 2–5. It requires Python 3.10 or later, so `.venv` is
+  now Python 3.11.
