@@ -46,3 +46,70 @@
 None.
 
 **Approved by:** Lane Faison, October 26, 2026
+
+## Week 6: image set
+
+### Files to create or change
+| File | Purpose |
+|---|---|
+| `week06/critique.py` | `extract_json`, `check`, `text_matches`, `disagreements` (no model), then the vision call and the command line |
+| `week06/generate.py` | `generate_one`, `run`, `summary`, the command line |
+| `week06/tests/test_critic_checker.py` | No-key tests of the checker on hand-written critiques |
+| `week06/tests/test_generate.py` | No-key tests of the generator with a fake Image API client |
+| `week06/prompts.json` | The five prompts, seeds 6301–6305, requirements, expected names |
+| `week06/images/` | The five FLUX images and `manifest.json` |
+| `week06/images-seed/`, `week06/images-nb/` | The seed repeat of FERNKIT, and FERNKIT on Gemini |
+| `week06/critique.json`, `week06/critique-mimo.json` | The two critics' answers |
+| `week06/CHECKS.md` | Costs, verdicts, seed check, comparison model, step 5, linter, Review |
+| `pytest.ini`, `requirements-dev.txt` | Collect `week06/tests` and put `week06/` on the import path; add `openrouter` |
+
+Test files have names of their own (`test_critic_checker.py`, not `test_checker.py`) because the
+Week 5 `tests/test_checker.py` already uses that name and pytest refuses two test modules with
+the same name.
+
+### Order of work
+1. Checker: write `test_critic_checker.py`, run it to see it fail, then the checker part of
+   `critique.py` until it passes. Commit `Image set: checker with tests`.
+2. Generator: write `test_generate.py`, see it fail, then `generate.py`.
+3. The vision call and the command line in `critique.py`. `ruff check .`; record what it finds.
+4. Billed run: five FLUX images, then look at all five myself, reading each name letter by
+   letter, before reading any critique. Then five MiniMax critiques, the FERNKIT seed repeat, and
+   FERNKIT on Gemini. Commit `Image set: five images, critiques, two image models`.
+5. Step 5: the MiMo critique, `--compare`, every disagreement checked by eye, my open-ended
+   critique of one image, and the three sentences. Commit `Image set: the critic checked`.
+6. The team pull request, then the Review section of `CHECKS.md`, tag `week06-submitted`.
+
+### Risks
+- The critic says "unmet" when the image meets the requirement, or "met" when it does not. No
+  no-key test can notice: those tests prove the checker reports what the critic said, not that
+  the critic is right. Only the second model (`--compare`) or my own eyes catch it, which is why
+  step 4 has me look before reading.
+- MiMo spends its budget on hidden reasoning and replies empty. It would show as five failed
+  critiques with `finish: length`; the SDK form `reasoning={"effort": "none"}` prevents it.
+- Gemini rejects `seed` or `aspect_ratio`. The finding is that reproducibility is not on offer,
+  not a bug; it goes in `CHECKS.md`.
+- FLUX misspells a name. That is a correct finding for the text comparison, not a failure of
+  the program; nothing is regenerated.
+- Running a billed command in a loop by mistake. The commands make one call per prompt and stop
+  without a key, and the tests never call a model.
+
+### Proof
+**Without a key** (`python -m pytest`, free, under a second):
+- `test_critic_checker.py`: all met; one unmet, named; one requirement unanswered; one invented;
+  a reply that is not JSON; JSON inside prose and a fence; loose requirement matching; the text
+  comparison (`"AI Integration"` against `"AI Integratlon"`, and `"FERNKIT"` against
+  `"FERNK1T"`); two critics disagreeing. This proves the checker turns any critique into the
+  right verdict.
+- `test_generate.py`: one call per prompt with the prompt and seed as given, every manifest
+  field, a missing cost recorded as `null` and reported, `--only` makes one call, a reply with no
+  image is a clear error, a failure partway keeps the manifest, and no key means no call. This
+  proves what was asked for and paid for is recorded.
+
+**With a key** (by hand, once each, about $0.13): five FLUX generations, five MiniMax critiques
+(checklist and banner read), five MiMo critiques, one seed repeat, one Gemini image. This proves
+what these models actually do on my prompts, and is the only part that costs money.
+
+### Subagents and parallel work
+None.
+
+**Approved by:** <your name>, <date>
