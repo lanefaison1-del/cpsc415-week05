@@ -86,8 +86,9 @@ Implements [`intent/image-set.md`](intent/image-set.md). Everything lives in `we
 ### Critic-checker (`week06/critique.py`)
 - **What it does:** sends each image with a yes/no checklist made from its requirements to a
   vision model, takes the JSON out of the reply, and compares the checklist with the requirements
-  in plain code. A second, narrow question asks the model to write the largest text in the image
-  exactly as printed, and the code compares that with the expected name. `--compare` lists where two
+  in plain code. A second, narrow question asks the model to write the name shown in the banner at
+  the top exactly as printed, and the code compares that with the expected name. It asks for the
+  banner, not the largest text: a creature's gear (a skateboard, a scarf) could carry larger text. `--compare` lists where two
   critique files disagree.
 - **Language:** Python 3.11, same as the generator; it reuses the same SDK client.
 - **Model:** `minimax/minimax-m3` as the critic, checked by `xiaomi/mimo-v2.6-flash`. **Why:**
@@ -118,8 +119,8 @@ Implements [`intent/image-set.md`](intent/image-set.md). Everything lives in `we
    unanswered.
 9. JSON inside prose or a code fence is still extracted.
 10. Requirement text is matched ignoring case and punctuation.
-11. Expected text is compared in code, not by the critic: the text the model read is compared
-    with `expected_text` ignoring case and punctuation. "AI Integration" against
+11. Expected text is compared in code, not by the critic: the banner name the model read is
+    compared with `expected_text` ignoring case and punctuation. "AI Integration" against
     "AI Integratlon" is a mismatch, and so is no reply.
 12. `--compare` lists every image and requirement where two critique files disagree, including
     the banner text read, without a key.
