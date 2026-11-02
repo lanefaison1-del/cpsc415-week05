@@ -8,7 +8,6 @@ from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
-
 from generate import run, summary
 
 WEEK06 = Path(__file__).resolve().parents[1]
