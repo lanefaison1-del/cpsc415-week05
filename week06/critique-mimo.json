@@ -1,0 +1,307 @@
+[
+  {
+    "name": "fernkit",
+    "model": "xiaomi/mimo-v2.6-flash",
+    "critique": {
+      "checks": [
+        {
+          "requirement": "There is exactly one creature in the image",
+          "met": true,
+          "evidence": "Only a single fox-like creature is visible in the image."
+        },
+        {
+          "requirement": "The background is plain white",
+          "met": true,
+          "evidence": "The background behind the creature and banner is solid white with no other elements."
+        },
+        {
+          "requirement": "The name is shown in a banner at the top",
+          "met": true,
+          "evidence": "A banner graphic at the top clearly displays the text FERNKIT."
+        },
+        {
+          "requirement": "There is no text other than the name",
+          "met": true,
+          "evidence": "The only text visible in the entire image is FERNKIT in the top banner."
+        },
+        {
+          "requirement": "The creature has leaves on its tail",
+          "met": true,
+          "evidence": "Green leaves are clearly visible growing along the fluffy tail."
+        },
+        {
+          "requirement": "The creature holds an acorn",
+          "met": true,
+          "evidence": "The creature is holding a brown acorn in its front paws."
+        }
+      ]
+    },
+    "raw": "{\"checks\": [{\"requirement\": \"There is exactly one creature in the image\", \"met\": true, \"evidence\": \"Only a single fox-like creature is visible in the image.\"}, {\"requirement\": \"The background is plain white\", \"met\": true, \"evidence\": \"The background behind the creature and banner is solid white with no other elements.\"}, {\"requirement\": \"The name is shown in a banner at the top\", \"met\": true, \"evidence\": \"A banner graphic at the top clearly displays the text FERNKIT.\"}, {\"requirement\": \"There is no text other than the name\", \"met\": true, \"evidence\": \"The only text visible in the entire image is FERNKIT in the top banner.\"}, {\"requirement\": \"The creature has leaves on its tail\", \"met\": true, \"evidence\": \"Green leaves are clearly visible growing along the fluffy tail.\"}, {\"requirement\": \"The creature holds an acorn\", \"met\": true, \"evidence\": \"The creature is holding a brown acorn in its front paws.\"}]}",
+    "usage": {
+      "in": 1245,
+      "out": 234,
+      "cost": 7.8054e-05,
+      "finish": "stop"
+    },
+    "check": {
+      "ok": true,
+      "problems": [],
+      "unmet": [],
+      "missing": [],
+      "extra": []
+    },
+    "text_read": "FERNKIT",
+    "text_matches": true,
+    "usage_text": {
+      "in": 1062,
+      "out": 4,
+      "cost": 9.3072e-06,
+      "finish": "stop"
+    }
+  },
+  {
+    "name": "dunekit",
+    "model": "xiaomi/mimo-v2.6-flash",
+    "critique": {
+      "checks": [
+        {
+          "requirement": "There is exactly one creature in the image",
+          "met": true,
+          "evidence": "Only one fox-like creature is visible in the center."
+        },
+        {
+          "requirement": "The background is plain white",
+          "met": true,
+          "evidence": "The background behind the creature and banner is a solid white color."
+        },
+        {
+          "requirement": "The name is shown in a banner at the top",
+          "met": true,
+          "evidence": "The text 'DUNEKIT' appears in a ribbon-style banner at the top of the image."
+        },
+        {
+          "requirement": "There is no text other than the name",
+          "met": true,
+          "evidence": "The only text visible in the image is 'DUNEKIT'."
+        },
+        {
+          "requirement": "The creature has sand-colored fur",
+          "met": true,
+          "evidence": "The creature's fur is a sandy, golden-tan color."
+        },
+        {
+          "requirement": "The creature wears a scarf",
+          "met": true,
+          "evidence": "A red/orange patterned scarf is wrapped around the creature's neck."
+        }
+      ]
+    },
+    "raw": "{\"checks\": [{\"requirement\": \"There is exactly one creature in the image\", \"met\": true, \"evidence\": \"Only one fox-like creature is visible in the center.\"}, {\"requirement\": \"The background is plain white\", \"met\": true, \"evidence\": \"The background behind the creature and banner is a solid white color.\"}, {\"requirement\": \"The name is shown in a banner at the top\", \"met\": true, \"evidence\": \"The text 'DUNEKIT' appears in a ribbon-style banner at the top of the image.\"}, {\"requirement\": \"There is no text other than the name\", \"met\": true, \"evidence\": \"The only text visible in the image is 'DUNEKIT'.\"}, {\"requirement\": \"The creature has sand-colored fur\", \"met\": true, \"evidence\": \"The creature's fur is a sandy, golden-tan color.\"}, {\"requirement\": \"The creature wears a scarf\", \"met\": true, \"evidence\": \"A red/orange patterned scarf is wrapped around the creature's neck.\"}]}",
+    "usage": {
+      "in": 1241,
+      "out": 235,
+      "cost": 0.00023954,
+      "finish": "stop"
+    },
+    "check": {
+      "ok": true,
+      "problems": [],
+      "unmet": [],
+      "missing": [],
+      "extra": []
+    },
+    "text_read": "DUNEKIT",
+    "text_matches": true,
+    "usage_text": {
+      "in": 1062,
+      "out": 4,
+      "cost": 9.3072e-06,
+      "finish": "stop"
+    }
+  },
+  {
+    "name": "reefkit",
+    "model": "xiaomi/mimo-v2.6-flash",
+    "critique": {
+      "checks": [
+        {
+          "requirement": "There is exactly one creature in the image",
+          "met": true,
+          "evidence": "There is only a single blue fox-like creature visible in the center."
+        },
+        {
+          "requirement": "The background is plain white",
+          "met": true,
+          "evidence": "The area behind the creature and banner is solid white."
+        },
+        {
+          "requirement": "The name is shown in a banner at the top",
+          "met": false,
+          "evidence": "The banner displays the text \"REFKIT\", which is incorrect (should be \"REEFKIT\")."
+        },
+        {
+          "requirement": "There is no text other than the name",
+          "met": false,
+          "evidence": "The text present is not the correct name \"REEFKIT\"."
+        },
+        {
+          "requirement": "The creature has fins",
+          "met": true,
+          "evidence": "The creature has fin-like appendages visible on the sides of its body/tail."
+        },
+        {
+          "requirement": "The creature wears a snorkel mask",
+          "met": true,
+          "evidence": "The creature is wearing a clear mask with goggles and a snorkel attached."
+        }
+      ]
+    },
+    "raw": "```json\n{\"checks\": [{\"requirement\": \"There is exactly one creature in the image\", \"met\": true, \"evidence\": \"There is only a single blue fox-like creature visible in the center.\"}, {\"requirement\": \"The background is plain white\", \"met\": true, \"evidence\": \"The area behind the creature and banner is solid white.\"}, {\"requirement\": \"The name is shown in a banner at the top\", \"met\": false, \"evidence\": \"The banner displays the text \\\"REFKIT\\\", which is incorrect (should be \\\"REEFKIT\\\").\"}, {\"requirement\": \"There is no text other than the name\", \"met\": false, \"evidence\": \"The text present is not the correct name \\\"REEFKIT\\\".\"}, {\"requirement\": \"The creature has fins\", \"met\": true, \"evidence\": \"The creature has fin-like appendages visible on the sides of its body/tail.\"}, {\"requirement\": \"The creature wears a snorkel mask\", \"met\": true, \"evidence\": \"The creature is wearing a clear mask with goggles and a snorkel attached.\"}]}\n```",
+    "usage": {
+      "in": 1241,
+      "out": 245,
+      "cost": 8.0132e-05,
+      "finish": "stop"
+    },
+    "check": {
+      "ok": false,
+      "problems": [
+        "2 requirement(s) reported unmet"
+      ],
+      "unmet": [
+        "The name is shown in a banner at the top",
+        "There is no text other than the name"
+      ],
+      "missing": [],
+      "extra": []
+    },
+    "text_read": "REFKIT",
+    "text_matches": false,
+    "usage_text": {
+      "in": 1062,
+      "out": 3,
+      "cost": 9.0272e-06,
+      "finish": "stop"
+    }
+  },
+  {
+    "name": "citykit",
+    "model": "xiaomi/mimo-v2.6-flash",
+    "critique": {
+      "checks": [
+        {
+          "requirement": "There is exactly one creature in the image",
+          "met": true,
+          "evidence": "Only one fox-like creature is centered in the image."
+        },
+        {
+          "requirement": "The background is plain white",
+          "met": true,
+          "evidence": "The background behind the character and banner is solid white."
+        },
+        {
+          "requirement": "The name is shown in a banner at the top",
+          "met": true,
+          "evidence": "A yellow banner at the top displays the text CITYKIT."
+        },
+        {
+          "requirement": "There is no text other than the name",
+          "met": true,
+          "evidence": "The only visible text in the image is the name CITYKIT."
+        },
+        {
+          "requirement": "The creature wears headphones",
+          "met": true,
+          "evidence": "The creature is wearing large black headphones over its ears."
+        },
+        {
+          "requirement": "The creature holds a skateboard",
+          "met": true,
+          "evidence": "The creature is holding a skateboard under its left arm."
+        }
+      ]
+    },
+    "raw": "```json\n{\"checks\": [{\"requirement\": \"There is exactly one creature in the image\", \"met\": true, \"evidence\": \"Only one fox-like creature is centered in the image.\"}, {\"requirement\": \"The background is plain white\", \"met\": true, \"evidence\": \"The background behind the character and banner is solid white.\"}, {\"requirement\": \"The name is shown in a banner at the top\", \"met\": true, \"evidence\": \"A yellow banner at the top displays the text CITYKIT.\"}, {\"requirement\": \"There is no text other than the name\", \"met\": true, \"evidence\": \"The only visible text in the image is the name CITYKIT.\"}, {\"requirement\": \"The creature wears headphones\", \"met\": true, \"evidence\": \"The creature is wearing large black headphones over its ears.\"}, {\"requirement\": \"The creature holds a skateboard\", \"met\": true, \"evidence\": \"The creature is holding a skateboard under its left arm.\"}]}\n```",
+    "usage": {
+      "in": 1235,
+      "out": 220,
+      "cost": 6.76648e-05,
+      "finish": "stop"
+    },
+    "check": {
+      "ok": true,
+      "problems": [],
+      "unmet": [],
+      "missing": [],
+      "extra": []
+    },
+    "text_read": "CITYKIT",
+    "text_matches": true,
+    "usage_text": {
+      "in": 1062,
+      "out": 4,
+      "cost": 9.3072e-06,
+      "finish": "stop"
+    }
+  },
+  {
+    "name": "snowkit",
+    "model": "xiaomi/mimo-v2.6-flash",
+    "critique": {
+      "checks": [
+        {
+          "requirement": "There is exactly one creature in the image",
+          "met": true,
+          "evidence": "The image displays a single snow fox character centered in the frame."
+        },
+        {
+          "requirement": "The background is plain white",
+          "met": true,
+          "evidence": "The area surrounding the creature and banner is a solid, unpatterned white."
+        },
+        {
+          "requirement": "The name is shown in a banner at the top",
+          "met": true,
+          "evidence": "A yellow banner containing the text \"SNOWKIT\" spans the top of the image."
+        },
+        {
+          "requirement": "There is no text other than the name",
+          "met": true,
+          "evidence": "The only visible characters in the image are the letters forming \"SNOWKIT\"."
+        },
+        {
+          "requirement": "The creature wears a knitted hat",
+          "met": true,
+          "evidence": "The creature has a blue and beige knitted beanie with a pom-pom on its head."
+        },
+        {
+          "requirement": "The creature wears mittens",
+          "met": true,
+          "evidence": "The creature is wearing beige knitted mittens on its hands."
+        }
+      ]
+    },
+    "raw": "```json\n{\n  \"checks\": [\n    {\n      \"requirement\": \"There is exactly one creature in the image\",\n      \"met\": true,\n      \"evidence\": \"The image displays a single snow fox character centered in the frame.\"\n    },\n    {\n      \"requirement\": \"The background is plain white\",\n      \"met\": true,\n      \"evidence\": \"The area surrounding the creature and banner is a solid, unpatterned white.\"\n    },\n    {\n      \"requirement\": \"The name is shown in a banner at the top\",\n      \"met\": true,\n      \"evidence\": \"A yellow banner containing the text \\\"SNOWKIT\\\" spans the top of the image.\"\n    },\n    {\n      \"requirement\": \"There is no text other than the name\",\n      \"met\": true,\n      \"evidence\": \"The only visible characters in the image are the letters forming \\\"SNOWKIT\\\".\"\n    },\n    {\n      \"requirement\": \"The creature wears a knitted hat\",\n      \"met\": true,\n      \"evidence\": \"The creature has a blue and beige knitted beanie with a pom-pom on its head.\"\n    },\n    {\n      \"requirement\": \"The creature wears mittens\",\n      \"met\": true,\n      \"evidence\": \"The creature is wearing beige knitted mittens on its hands.\"\n    }\n  ]\n}\n```",
+    "usage": {
+      "in": 1241,
+      "out": 292,
+      "cost": 8.86648e-05,
+      "finish": "stop"
+    },
+    "check": {
+      "ok": true,
+      "problems": [],
+      "unmet": [],
+      "missing": [],
+      "extra": []
+    },
+    "text_read": "SNOWKIT",
+    "text_matches": true,
+    "usage_text": {
+      "in": 1062,
+      "out": 4,
+      "cost": 9.3072e-06,
+      "finish": "stop"
+    }
+  }
+]

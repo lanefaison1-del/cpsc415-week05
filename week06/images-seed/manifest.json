@@ -1,0 +1,22 @@
+[
+  {
+    "name": "fernkit",
+    "prompt": "An original cute creature-collector monster in colorful anime game art style: a small forest fox kit with moss-green fur, leaves growing on its fluffy tail, holding an acorn. Exactly one creature, centered, full body, on a plain white background. A banner across the top shows the name \"FERNKIT\" in large, clear capital letters. No other text anywhere in the image.",
+    "seed": 6301,
+    "requirements": [
+      "There is exactly one creature in the image",
+      "The background is plain white",
+      "The name is shown in a banner at the top",
+      "There is no text other than the name",
+      "The creature has leaves on its tail",
+      "The creature holds an acorn"
+    ],
+    "expected_text": "FERNKIT",
+    "model": "black-forest-labs/flux.2-klein-4b",
+    "aspect_ratio": "1:1",
+    "file": "fernkit.jpg",
+    "media_type": "image/jpeg",
+    "cost": 0.014,
+    "seconds": 3.6
+  }
+]
