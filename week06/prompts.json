@@ -1,0 +1,72 @@
+[
+  {
+    "name": "fernkit",
+    "prompt": "An original cute creature-collector monster in colorful anime game art style: a small forest fox kit with moss-green fur, leaves growing on its fluffy tail, holding an acorn. Exactly one creature, centered, full body, on a plain white background. A banner across the top shows the name \"FERNKIT\" in large, clear capital letters. No other text anywhere in the image.",
+    "seed": 6301,
+    "requirements": [
+      "There is exactly one creature in the image",
+      "The background is plain white",
+      "The name is shown in a banner at the top",
+      "There is no text other than the name",
+      "The creature has leaves on its tail",
+      "The creature holds an acorn"
+    ],
+    "expected_text": "FERNKIT"
+  },
+  {
+    "name": "dunekit",
+    "prompt": "An original cute creature-collector monster in colorful anime game art style: a small desert fox kit with sandy fur, very large ears, and a scarf around its neck. Exactly one creature, centered, full body, on a plain white background. A banner across the top shows the name \"DUNEKIT\" in large, clear capital letters. No other text anywhere in the image.",
+    "seed": 6302,
+    "requirements": [
+      "There is exactly one creature in the image",
+      "The background is plain white",
+      "The name is shown in a banner at the top",
+      "There is no text other than the name",
+      "The creature has sand-colored fur",
+      "The creature wears a scarf"
+    ],
+    "expected_text": "DUNEKIT"
+  },
+  {
+    "name": "reefkit",
+    "prompt": "An original cute creature-collector monster in colorful anime game art style: a small ocean fox kit with blue fur and fins on its tail, wearing a snorkel mask. Exactly one creature, centered, full body, on a plain white background. A banner across the top shows the name \"REEFKIT\" in large, clear capital letters. No other text anywhere in the image.",
+    "seed": 6303,
+    "requirements": [
+      "There is exactly one creature in the image",
+      "The background is plain white",
+      "The name is shown in a banner at the top",
+      "There is no text other than the name",
+      "The creature has fins",
+      "The creature wears a snorkel mask"
+    ],
+    "expected_text": "REEFKIT"
+  },
+  {
+    "name": "citykit",
+    "prompt": "An original cute creature-collector monster in colorful anime game art style: a small city fox kit with gray fur, wearing headphones and holding a skateboard. Exactly one creature, centered, full body, on a plain white background. A banner across the top shows the name \"CITYKIT\" in large, clear capital letters. No other text anywhere in the image.",
+    "seed": 6304,
+    "requirements": [
+      "There is exactly one creature in the image",
+      "The background is plain white",
+      "The name is shown in a banner at the top",
+      "There is no text other than the name",
+      "The creature wears headphones",
+      "The creature holds a skateboard"
+    ],
+    "expected_text": "CITYKIT"
+  },
+  {
+    "name": "snowkit",
+    "prompt": "An original cute creature-collector monster in colorful anime game art style: a small snow fox kit with pale blue fur, wearing a knitted hat and mittens. Exactly one creature, centered, full body, on a plain white background. A banner across the top shows the name \"SNOWKIT\" in large, clear capital letters. No other text anywhere in the image.",
+    "seed": 6305,
+    "requirements": [
+      "There is exactly one creature in the image",
+      "The background is plain white",
+      "The name is shown in a banner at the top",
+      "There is no text other than the name",
+      "The creature wears a knitted hat",
+      "The creature wears mittens"
+    ],
+    "expected_text": "SNOWKIT"
+  }
+]
