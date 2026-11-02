@@ -90,3 +90,23 @@ works.
 ## Total
 FLUX $0.0840 (five images and the seed repeat), Gemini $0.0336, critics about $0.0080 including the
 repeated run. About $0.13.
+
+## Review
+- **PR:** https://github.com/weambrossi/cpsc415-tp1-creatures/pull/4 (branch `week06-lane`; the team plan calls it PR 3). It carries this image set as `images/lane/` and the web app that wires the generator and the critic into the page.
+- **Gate:** the course's `gate.sh` as the pre-push hook; ruff and 43 no-key tests passed before the push.
+- **How the reviewer was run:** the full diff is 78,591 characters, over `review.py`'s 60,000 limit, so it reviewed the code diff (`--diff`, without the image JSON in `images/` and `prompts/`). On `minimax/minimax-m3` it spent its 2,000-token budget and replied with nothing: exit 2, the gate stays closed. Runs 1–3 used `xiaomi/mimo-v2.6-flash`, about $0.002 each.
+
+| Run | Pass | Finding | What I did |
+|---|---|---|---|
+| 1 | 2 | Unreadable critic result is an HTML 500, missing cost silently $0 | Fixed (test first) |
+| 1 | 2 | Failures while shaping the reply escape the spec's JSON 502 | Fixed (test first) |
+| 1 | 3 | Server duplicates the critic's model slug | Fixed |
+| 2 | 1 | Malformed entry raises an uncaught KeyError | Pushed back: entries come only from `build_prompt`, and any error there is already a JSON 502 |
+| 2 | 2 | `seconds` missing from the generate reply | Fixed (test first) |
+| 2 | 3 | Only one usage key present is summed | Pushed back: that is one call, and its cost |
+| 2–3 | 3, then 2 | The page double counts the image cost | Pushed back: the critique cost is the critic's two calls; clarified the spec wording |
+| 3 | 2 | No test for a result with no usage | Added the test (behavior was already null) |
+| 3 | 3, 4 | Cache `load_critic`; docstring key example; test intent | Kept, with reasons on the PR |
+
+- **Last exit code:** 1, on findings answered on the PR. The reviewer is a second model: three of its findings were wrong in the same way the critic was wrong about REEFKIT.
+- **Approved by:** Ethan, to approve on GitHub (team plan: Ethan approves PR 3, then merges). I approved Joud's critic PR (#3).
